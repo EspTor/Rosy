@@ -1,0 +1,26 @@
+# Obsidian specific files
+.obsidian/
+# This folder contains vault-specific settings, plugins, and themes.
+# You might want to sync it if you want consistent settings across devices.
+# Consider whether you want to include plugin data (can be large).
+
+# Temporary files
+*.tmp
+*.temp
+.DS_Store
+Thumbs.db
+
+# Obsidian cache and plugins (optional - uncomment if you want to exclude)
+# .obsidian/workspace.json
+# .obsidian/workspaceStorage/
+# .obsidian/cache/
+
+# If you use the Local Images plugin or attachments
+# .attachments/
+
+# If you use sync services, they might create these
+.sync/
+
+# Plugin data (can be large, consider excluding)
+plugins/
+data/
