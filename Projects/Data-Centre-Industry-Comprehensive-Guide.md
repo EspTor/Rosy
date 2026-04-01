@@ -79,6 +79,74 @@ A robust power chain is foundational:
 - 2024: **15-20 kW/rack** typical for enterprise/colocation; **50-100+ kW/rack** for AI clusters
 - High densities require higher voltage distribution (415V/480V), rear-door heat exchangers, or liquid cooling.
 
+### 2.1.5 Power Supply Criticality, HVDC, and NordicEPOD Case Study
+
+Power is the lifeblood of data centres. Any interruption or degradation can cause immediate service disruption, data loss, and revenue impact. The power supply chain must be designed for **24/7/365 reliability** with multiple layers of redundancy.
+
+#### Power Supply Importance
+
+A data centre's power system is its most critical infrastructure component. Unlike cooling, which has thermal inertia, power interruptions are instantaneous and catastrophic. Key considerations:
+
+- **Reliability targets:** Tier III facilities target 99.982% availability (1.6 hrs downtime/year); Tier IV targets 99.995% (26.3 min). Achieving these requires eliminating single points of failure throughout the power chain.
+- **Power quality:** Voltage sags, surges, harmonics, and frequency deviations can damage IT equipment. UPS systems condition power, maintaining tight tolerances (±2% voltage, ±2Hz frequency).
+- **Load management:** Power distribution must handle rising power densities. AI clusters can exceed 100 kW/rack, requiring careful load balancing across three-phase power systems to avoid phase imbalance.
+- **Fuel logistics:** Generators require on-site fuel storage (typically 24-48 hours runtime) and reliable fuel delivery contracts. In cold climates, fuel gelling can be an issue requiring additives or heated tanks.
+
+#### High Voltage DC (HVDC) Distribution
+
+Traditional data centres use AC distribution from utility to racks. However, **High Voltage DC (HVDC)** is emerging as an efficiency improvement, especially for hyperscale and AI facilities:
+
+- **HVDC architecture:** Utility medium voltage (e.g., 10-35 kV) is converted to high-voltage DC (typically 380V-750V DC) near the load, then stepped down to standard voltages at the rack. This eliminates AC/DC conversion losses at each UPS/PDU stage.
+- **Efficiency gains:** HVDC systems can achieve **96-98% efficiency** across the power chain vs 92-94% for traditional AC with double-conversion UPS. This directly improves PUE by 0.05-0.10.
+- **Simplified infrastructure:** HVDC removes the need for separate UPS systems, inverters, and some conversion stages. Fewer components mean higher reliability and reduced maintenance.
+- **Challenges:** Requires DC-rated PDUs, breakers, and rack equipment. Most servers still use AC power supplies, so additional conversion at the server level negates some benefits. Heterogeneous equipment coexistence can be complex.
+- **Adoption:** Hyperscalers (Google, Microsoft) have deployed HVDC in select facilities, particularly those with high renewable energy inputs (solar, wind) which are naturally DC. Eaton, ABB, and Schneider offer HVDC solutions.
+- **Future potential:** If servers adopt native DC power supplies (some hyperscalers are exploring this), HVDC could become mainstream. The Open Compute Project (OCP) has published HVDC specifications.
+
+#### NordicEPOD Power Delivery Case Study
+
+NordicEPOD represents a specialized approach to modular power delivery in data centres, particularly suited for the Nordic region's cool climate and renewable energy ecosystem. Their solutions exemplify the shift toward industrialized, repeatable power infrastructure.
+
+**Modular Power PODs:**
+- Pre-fabricated, containerized power modules containing transformers, switchgear, UPS, and distribution.
+- Scalable capacity increments (e.g., 500 kW, 1 MW, 2 MW modules).
+- Factory-tested for quality, shipped to site for rapid deployment (weeks vs months).
+- Enables phased capacity expansion without major civil construction.
+
+**Key Features:**
+- **Integrated design:** Power, cooling, and monitoring in a single unit.
+- **High efficiency:** Modern converters and UPS with >96% efficiency.
+- **Redundancy built-in:** N+1 or 2N configurations within each POD.
+- **Rapid deployment:** Reduces time-to-market for new capacity.
+- **Standardization:** Simplifies maintenance and spares management.
+
+**Nordic Advantage:**
+- **Cool climate:** Reduces cooling requirements for power systems, enabling higher outdoor air utilization and free cooling.
+- **Renewable energy:** High penetration of hydro, wind, and solar aligns with sustainable power delivery goals.
+- **Grid stability:** Strong transmission infrastructure with high availability.
+- **Engineering expertise:** Nordic countries have deep expertise in electrical systems and power electronics.
+
+**Use Cases:**
+- **Edge data centres:** Quick setup in remote locations.
+- **Hyperscale campuses:** Incremental capacity additions alongside main build-out.
+- **Colocation expansion:** Adding power to existing facilities without disrupting operations.
+- **Retrofits:** Replacing aging infrastructure with modern, efficient solutions.
+- **Temporary capacity:** During main facility construction or upgrades.
+
+**Industry Impact:**
+- Companies like NordicEPOD accelerate data centre construction while improving reliability and efficiency.
+- They represent the shift from bespoke civil construction to industrialized, repeatable solutions—mirroring hyperscalers' demand for standardized, scalable infrastructure.
+- Their modular approach reduces CAPEX per MW and improves predictability.
+- NordicEPOD's focus on sustainable power delivery aligns with Europe's stringent energy efficiency directives and carbon neutrality goals.
+
+**Interview Talking Points:**
+- "Modular power delivery reduces construction time by 30-50% and improves quality control through factory testing."
+- "The Nordic region's cool climate and renewable grid make it ideal for sustainable data centre power systems."
+- "HVDC distribution can improve PUE by 0.05-0.10 by eliminating multiple AC/DC conversion stages."
+- "Integrated power PODs with built-in redundancy enable Tier III/IV designs without complex on-site integration."
+
+---
+
 ### 2.2 Cooling Systems
 
 Cooling accounts for **30-40% of total energy consumption** and is a primary focus for efficiency improvements.
