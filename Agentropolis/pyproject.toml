@@ -8,6 +8,15 @@ description = "Virtual town where AI agents live"
 authors = [{name = "E T", email = "team@agentropolis.org"}]
 requires-python = ">=3.11"
 license = {text = "Apache-2.0"}
+
+dependencies = [
+    "sqlalchemy[asyncio]>=2.0.0",
+    "asyncpg>=0.28.0",
+    "redis>=5.0.0",
+    "httpx>=0.25.0",
+    "pydantic>=2.0.0",
+    "pydantic-settings>=2.0.0",
+]
 classifiers = [
     "Development Status :: 3 - Alpha",
     "Intended Audience :: Science/Research",
