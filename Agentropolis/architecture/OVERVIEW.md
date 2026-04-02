@@ -1,102 +1,106 @@
-# System Architecture
+# System Architecture (Low-Cost Version)
 
 ## High-Level Overview
 
 ```
-┌─────────────────────────────────────────────────────────────┐
-│                    Observer Interface                      │
-└────────────────────────────┬───────────────────────────────┘
-                             │
-                             ▼
-┌─────────────────────────────────────────────────────────────┐
-│                Town Simulation Engine                      │
-│  ┌─────────────┐  ┌─────────────┐  ┌──────────────────┐ │
-│  │   Physics   │  │  Time Step  │  │  Event Queue    │ │
-│  │  Simulator  │  │  Controller │  │  (async actions) │ │
-│  └─────────────┘  └─────────────┘  └──────────────────┘ │
-└─────────────┬───────────────────────────────────────────────┘
-              │
-    ┌─────────┼─────────┐
-    ▼         ▼         ▼
-┌──────┐ ┌──────┐ ┌──────┐
-│Agent │ │Agent │ │Agent │ │ ...
-└──────┘ └──────┘ └──────┘
+┌─────────────────────────────────────────────┐
+│         Dashboard (Streamlit/React)         │
+└───────────────┬─────────────────────────────┘
+                │ WebSocket / REST
+                ▼
+┌─────────────────────────────────────────────┐
+│        API Server (FastAPI on VM 3)         │
+│  • Agent registration                      │
+│  • Observer queries                        │
+│  • Webhook endpoint (optional)             │
+│  • Cost monitoring                         │
+└───────────────┬─────────────────────────────┘
+                │
+                ▼
+┌─────────────────────────────────────────────┐
+│     Simulation Engine (async Python)        │
+│  ┌─────────────┐  ┌─────────────┐        │
+│  │ Tick Loop   │  │  Systems    │        │
+│  │ (10/sec)    │  │  - Movement │        │
+│  └─────────────┘  │  - Needs     │        │
+│                   │  - Economy   │        │
+│                   │  - Social    │        │
+│                   └─────────────┘        │
+└───────────────┬─────────────────────────────┘
+                │
+        ┌───────┼───────┐
+        ▼       ▼       ▼
+┌─────────┐ ┌──────┐ ┌──────┐
+│PostgreSQL│ │ Redis│ │File │
+│(VM 1)    │ │(VM 2)│ │Cache│
+└─────────┘ └──────┘ └──────┘
 ```
 
-## Core Components
+## Key Changes from Original Spec
 
-### 1. Town Simulation Engine
-- Entity-Component-System (ECS) architecture
-- Spatial partitioning for efficient queries
-- Deterministic tick progression
-- Coordinates agent lifecycle
+### 1. No Rust
+- **Original**: Rust for engine performance
+- **Reality**: Python async can handle 100 agents at 10 ticks/sec on one core
+- **Why**: Development speed > perf for this scale. Optimize only if needed.
 
-### 2. Agent Architecture (BODIES)
+### 2. No Kubernetes
+- **Original**: K8s for scaling
+- **Reality**: Docker Compose on 4 VMs (or single machine)
+- **Why**: Overkill for 100 agents, adds complexity
 
-**Brain**: Goal system, memory store, personality engine, planning module
-**Body**: Location, inventory, physical state (health, energy, hunger, happiness)
-**Social Graph**: Relationships, social roles, reputation
-**Identity**: Persistent ID, name, appearance, backstory, values
+### 3. LLM Integration
+- **Original**: Every agent calls LLM every tick
+- **Reality**: 80% rule-based, 20% LLM only for social interactions
+- **Implementation**: OpenRouter with caching, rate limiting, batching
 
-### 3. Town Map & Environment
-- 1000×1000 grid with 7 districts
-- Location types: residential, commercial, industrial, civic, recreational
-- Resource distribution (natural, commercial, social)
-- Pathfinding with A* on navigation mesh
-- Daily, weekly, seasonal cycles
-
-### 4. Interaction System
-- Direct communication (conversations)
-- Economic transactions (buy/sell/gift)
-- Collaborative actions (joint tasks)
-- Conflict and competition
-- Social relationship development
-- Information spread and gossip
-- Group formation (families, businesses, clubs)
-
-### 5. Economy System
-- Currency and banking
-- Jobs and labor market
-- Business operations and production chains
-- Dynamic pricing (supply/demand)
-- Property ownership
-- Taxation and government budget
-
-### 6. Persistence Layer
-- PostgreSQL for structured state
-- Redis for hot cache and spatial index
-- Chroma/Pinecone for vector memories (semantic retrieval)
-- TimescaleDB for time-series event logs
-- Snapshot system for fast restart
-
-### 7. Observer API & Dashboard
-- REST API for querying state
-- WebSocket for real-time updates
-- Web dashboard with map visualization
-- Event timeline and analytics
-- Export capabilities
-
-## Technology Stack
-
-- **Core Engine**: Rust or C++ (performance-critical)
-- **Agent Brains**: Python (flexibility, ML libraries)
-- **API**: FastAPI (async, auto-docs)
-- **Frontend**: React + TypeScript
-- **Database**: PostgreSQL + TimescaleDB
-- **Cache**: Redis Cluster
-- **Vector DB**: Chroma or Pinecone
-- **Message Queue**: NATS or Kafka
-- **Deployment**: Docker + Kubernetes
-- **Monitoring**: Prometheus + Grafana
-
-## Key Design Decisions
-
-1. **Server-authoritative**: Engine validates all actions
-2. **Deterministic**: Reproducible simulations with fixed seed
-3. **Brain-agnostic**: Support multiple AI backends
-4. **Observable**: Everything logged for analysis
-5. **Extensible**: Plugin architecture for new features
+### 4. Infrastructure
+- **Original**: Cloud managed services (RDS, ElastiCache, etc.)
+- **Reality**: Self-hosted on Oracle Cloud Free or local machine
+- **Cost**: $0 vs $300+/month
 
 ---
 
-*Next: Agent specifications in agents/SPECIFICATION.md*
+## Core Components
+
+### 1. Tick Engine (Python + asyncio)
+
+Simulated code here.
+
+### 2. Agent Brain: Hybrid
+
+Rule-based core + LLM enhancement.
+LLM calls: ~6/agent/hour for socialite agents.
+Cost: ~$0.43/month per socialite agent.
+
+### 3. Spatial Index: Redis GEO
+
+Fast neighbor queries. O(log N) performance.
+
+### 4. PostgreSQL Schema (Simplified)
+
+Tables: agents, agent_profiles, relationships, events, transactions, locations.
+
+---
+
+## Data Flow
+
+Tick → Perception → Brain (rule/LLM) → Validation → Execution → Persistence
+
+---
+
+## Performance
+
+100 agents on 8GB VM: 10 ticks/sec, 50-80ms/tick, 2GB RAM, 30% CPU.
+
+---
+
+## What Got Removed for Cost
+
+- ✗ Rust engine
+- ✗ Kubernetes
+- ✗ Managed cloud databases
+- ✗ Expensive LLMs
+- ✗ Vector database (only if needed)
+- ✗ Microservices
+
+**This architecture delivers 90% of the value for 5% of the cost.**

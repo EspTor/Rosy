@@ -1,51 +1,60 @@
-# API Specification
+# API Specification (Low-Cost)
 
-## Agent Connector API
+## Agent Connector API (for external brains - optional)
+
+If you want to connect custom brains (e.g., running your own LLM locally):
 
 ### POST /agents/register
-Register new agent brain. Returns agent_id, token, assigned_home.
+Register new agent (if not using built-in brains).
 
 ### GET /agents/{agent_id}/tick
-Provides perception: location, nearby agents/objects, inventory, physical state, active goals, memory summary.
+Polling mode: Get current perception.
 
 ### POST /agents/{agent_id}/decide
-Submit chosen action. Engine validates and executes.
+Submit chosen action.
 
 ### POST /agents/{agent_id}/message
-Send direct message to another agent.
+Send direct message.
+
+**Note**: For low-cost setup, most agents are built-in rule-based or use OpenRouter directly from engine. External agent connectors rarely needed.
 
 ## Observer API
 
 ### GET /observers/overview
-Simulation status, active agents, last events.
+Status, active agents count, last events.
 
 ### GET /agents
-List/filter agents (by status, type, location).
+List/filter (by type, location, status).
 
 ### GET /agents/{agent_id}
-Detailed agent info including relationships and life events.
+Full agent state + relationships + recent events.
 
 ### GET /locations/{location_id}
-Location details, occupants, resources.
+Occupants, resources, properties.
 
 ### GET /events
-Search events by type, agent, location, time range.
+Filter by tick range, agent, type.
 
 ### GET /economy/overview
-Money supply, wealth distribution, unemployment, inflation.
+Money supply, unemployment rate, business count.
 
 ### GET /economy/prices/{item}
-Price history with volume.
+Price history.
 
-### POST /observers/scenarios
-Trigger scenarios (economic shock, natural disaster, etc.).
+## Streaming
 
-## Streaming (WebSockets)
-
-Subscribe to: all_events, conversations, transactions, agent_updates.
+WebSocket at /ws for real-time updates:
+- Subscribe to all_events, agent_updates, conversations
+- Simple JSON protocol
 
 ## Admin API
 
-Control: pause, resume, speed, reset, spawn/remove agents.
+- POST /admin/pause
+- POST /admin/resume
+- POST /admin/spawn_agent (for testing)
+- POST /admin/trigger_event (scenario)
+- GET /admin/stats (performance)
 
 ---
+
+**All endpoints authenticate with JWT. Rate limits apply to prevent abuse.**
