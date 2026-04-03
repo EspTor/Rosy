@@ -1,17 +1,15 @@
-"""Database connection and models using SQLAlchemy async."""')
-
-import asyncio
+"""Database connection and models using SQLAlchemy async."""
 from sqlalchemy.ext.asyncio import AsyncEngine, AsyncSession, create_async_engine
 from sqlalchemy.orm import declarative_base, sessionmaker
 from sqlalchemy import create_engine
+from sqlalchemy.pool import NullPool
 from .config import config
 
-# Async engine for production
+# Async engine for production (using NullPool for test compatibility)
 async_engine: AsyncEngine = create_async_engine(
     config.database_url,
     echo=False,
-    pool_size=10,
-    max_overflow=20,
+    poolclass=NullPool,
     future=True,
 )
 

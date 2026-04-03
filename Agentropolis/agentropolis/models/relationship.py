@@ -1,6 +1,7 @@
-"""Relationship model.""""""
+"""Relationship model."""
 import uuid
-from sqlalchemy import Column, String, Float, Integer, ForeignKey
+from datetime import datetime
+from sqlalchemy import Column, String, Float, Integer, ForeignKey, DateTime
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy.sql import func
 from ..database import Base

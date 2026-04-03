@@ -1,4 +1,4 @@
-"""Quick verification that the package structure is correct.""""""
+"""Quick verification that the package structure is correct."""
 
 import sys
 print("Testing Agentropolis package structure...")
@@ -31,8 +31,7 @@ except ImportError as e:
     print(f"✗ Failed to import models: {e}")
     sys.exit(1)
 
-print("
-✅ All basic imports successful!")
+print("\n✅ All basic imports successful!")
 print("=" * 40)
 print("Next steps:")
 print("1. pip install -e '.[dev]'")

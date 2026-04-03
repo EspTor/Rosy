@@ -1,4 +1,4 @@
-"""Models package.""""""
+"""Models package."""
 from .agent import Agent
 from .location import Location
 from .relationship import Relationship

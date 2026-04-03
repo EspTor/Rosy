@@ -1,4 +1,4 @@
-"""Create database tables.""""""
+"""Create database tables."""
 
 import asyncio
 from agentropolis.database import async_engine, init_db

@@ -1,4 +1,4 @@
-"""Model tests.""""""
+"""Model tests."""
 import pytest
 from agentropolis.models import Agent
 

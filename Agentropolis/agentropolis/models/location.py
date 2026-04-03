@@ -1,6 +1,7 @@
-"""Location model.""""""
+"""Location model."""
 import uuid
-from sqlalchemy import Column, String, Float, Integer, Boolean
+from datetime import datetime
+from sqlalchemy import Column, String, Float, Integer, Boolean, JSON, DateTime
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy.sql import func
 from ..database import Base
@@ -15,7 +16,7 @@ class Location(Base):
     y: Mapped[float] = mapped_column(Float, nullable=False)
     capacity: Mapped[int] = mapped_column(Integer, default=10)
     current_occupancy: Mapped[int] = mapped_column(Integer, default=0)
-    properties: Mapped[dict] = mapped_column(dict)
+    properties: Mapped[dict] = mapped_column(JSON, nullable=True)
     provides_food: Mapped[bool] = mapped_column(Boolean, default=False)
     provides_sleep: Mapped[bool] = mapped_column(Boolean, default=False)
     provides_entertainment: Mapped[bool] = mapped_column(Boolean, default=False)

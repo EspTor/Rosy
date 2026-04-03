@@ -4,6 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "agentropolis"
+version = "0.1.0"
 description = "Virtual town where AI agents live"
 authors = [{name = "E T", email = "team@agentropolis.org"}]
 requires-python = ">=3.11"
@@ -51,3 +52,6 @@ profile = "black"
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 addopts = ["--cov=agentropolis"]
+
+[tool.setuptools]
+packages = ["agentropolis", "scripts"]
